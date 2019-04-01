@@ -24,25 +24,19 @@
 <script>
 export default {
   name: 'TodoList',
-  props: {
-    todos: {
-      type: Array,
-      default: () => {
-        return []
-      }
-    },
-    filter: {
-      type: String,
-      default: 'all'
-    }
-  },
   data() {
     return {
       beforeEditCache: '',
-      editTodo: '',
+      editTodo: ''
     }
   },
   computed: {
+    todos() {
+      return this.$store.state.todos
+    },
+    filter() {
+      return this.$store.state.filter
+    },
     showTodo: function() {
       let filter = this.filter;
       let showTodo = this.todos.filter( data => {
@@ -58,12 +52,10 @@ export default {
     },
     allDone: {
       get: function () {
-        return this.todos.every(data => data.completed);
+        return this.$store.getters.allCompleted
       },
       set: function (value) {
-        this.todos.forEach(function (todo) {
-          todo.completed = value;
-        });
+        this.$store.commit('setAllCompleted',value)
       }
     }
   },
@@ -75,7 +67,6 @@ export default {
     removeTodo: function(todo) {
       var index = this.todos.indexOf(todo);
       this.todos.splice(index, 1);
-      this.$emit('update:todos', this.todos)
     },
     doneEdit: function(todo) {
       if (!this.editTodo) {
@@ -83,10 +74,9 @@ export default {
       }
       this.editTodo = null;
       this.beforeEditCache = null;
-      this.$emit('doneEdit',todo);
       todo.title = todo.title.trim();
       if (!todo.title) {
-        this.$emit('removeTodo',todo);
+        this.removeTodo(todo)
       }
     },
     cancelEdit: function(todo) {
