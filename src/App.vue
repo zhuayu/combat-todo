@@ -9,35 +9,25 @@
         <input id="toggle-all" class="toggle-all" type="checkbox">
         <label for="toggle-all">Mark all as complete</label>
         <ul class="todo-list">
-          <li class="todo completed">
+          <li :class="['todo',{completed: todo.completed === true}, {editing: editTodo === todo}]" v-for="(todo,index) in todos" :key="index">
             <div class="view">
               <input class="toggle" type="checkbox">
-              <label>代办 一</label>
+              <label @dblclick="editingMode(todo)">{{todo.title}}</label>
               <button class="destroy"></button>
             </div>
-            <input class="edit" type="text">
-          </li>
-          <li class="todo editing">
-            <div class="view">
-              <input class="toggle" type="checkbox" >
-              <label>代办 二</label>
-              <button class="destroy"></button>
-            </div>
-            <input class="edit" type="text">
-          </li>
-          <li class="todo">
-            <div class="view">
-              <input class="toggle" type="checkbox" >
-              <label>代办 三</label>
-              <button class="destroy"></button>
-            </div>
-            <input class="edit" type="text">
+            <input class="edit" type="text" 
+              v-todo-focus="editTodo === todo" 
+              v-model="todo.title"
+              @blur="doneEdit(todo)" 
+              @keyup.enter="doneEdit(todo)" 
+              @keyup.esc="cancelEdit(todo)"
+              >
           </li>
         </ul>
       </section>
       <footer class="footer">
         <span class="todo-count">
-          <strong>3</strong> todo
+          <strong>{{todos.length}}</strong> todo
         </span>
         <ul class="filters">
           <li><a href="#/all" class="selected">All</a></li>
@@ -59,7 +49,50 @@
 import '@/assets/base.css'
 import '@/assets/index.css'
 export default {
-  
+  data() {
+    return {
+      beforeEditCache:null,
+      editTodo:null,
+      todos:[{
+        title: '代办一',
+        completed: true,
+      },{
+        title: '代办二',
+        completed: false,
+      }]
+    }
+  },
+  methods: {
+    editingMode(todo) {
+      this.beforeEditCache = todo.title;
+      this.editTodo = todo;
+    },
+    doneEdit: function (todo) {
+      if (!this.editTodo) {
+        return;
+      }
+      this.editTodo = null;
+      this.beforeEditCache = null;
+      todo.title = todo.title.trim();
+      if (!todo.title) {
+        this.removeTodo(todo);
+      }
+    },
+
+    cancelEdit: function (todo) {
+      this.editTodo = null;
+      todo.title = this.beforeEditCache;
+      this.beforeEditCache = null;
+    },
+  },
+  // http://vuejs.org/guide/custom-directive.html
+  directives: {
+    'todo-focus': function (el, binding) {
+      if (binding.value) {
+        el.focus();
+      }
+    }
+  }
 }
 </script>
 
