@@ -1,11 +1,20 @@
 <template>
   <div id="app">
     <section class="todoapp" v-cloak>
-      <header class="header">
+      <the-header :todos.sync="todos" />
+      <todo-list 
+        :filter="filter"
+        :todos.sync="todos" />
+      <the-footer 
+        :filter.sync="filter"
+        :todos.sync="todos"/>
+
+      <!-- <header class="header">
         <h1>todos</h1>
         <input class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?" v-model="newTodo" @keyup.enter="addTodo()">
-      </header>
-      <section class="main">
+      </header> -->
+
+      <!-- <section class="main">
         <input id="toggle-all" class="toggle-all" type="checkbox" v-model="allDone">
         <label for="toggle-all">Mark all as complete</label>
         <ul class="todo-list">
@@ -24,8 +33,10 @@
               >
           </li>
         </ul>
-      </section>
-      <footer class="footer">
+      </section> -->
+
+
+      <!-- <footer class="footer">
         <span class="todo-count">
           <strong>{{todos.length}}</strong> todo
         </span>
@@ -35,26 +46,32 @@
           <li><a href="#/completed" :class="{selected: filter === 'completed'}" @click="changeFilter('completed')">Completed</a></li>
         </ul>
         <button class="clear-completed" v-show="todos.some(data => data.completed)" @click="removeCompleted" >Clear completed</button>
-      </footer>
+      </footer> -->
+      
     </section>
-    <footer class="info">
+    <!-- <footer class="info">
       <p>Double-click to edit a todo</p>
       <p>Written by <a href="http://evanyou.me">Evan You</a></p>
       <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
-    </footer>
+    </footer> -->
   </div>
 </template>
 
 <script>
+import TheHeader from '@/components/TheHeader'
+import TodoList from '@/components/TodoList'
+import TheFooter from '@/components/TheFooter'
+
+
 import '@/assets/base.css'
 import '@/assets/index.css'
 export default {
   data() {
     return {
       filter: 'all',
-      newTodo: '',
-      beforeEditCache:null,
-      editTodo:null,
+      // newTodo: '',
+      // beforeEditCache:null,
+      // editTodo:null,
       todos:[{
         title: '代办一',
         completed: true,
@@ -65,81 +82,82 @@ export default {
     }
   },
   methods: {
-    changeFilter: function(filter) {
-      this.filter = filter
-    },
-    addTodo: function () {
-      var value = this.newTodo && this.newTodo.trim();
-      if (!value) {
-        return;
-      }
-      this.todos.push({ id: this.todos.length + 1, title: value, completed: false });
-      this.newTodo = '';
-    },
-    removeTodo: function (todo) {
-      var index = this.todos.indexOf(todo);
-      this.todos.splice(index, 1);
-    },
-    removeCompleted: function () {
-      this.todos = this.todos.filter(data => !data.completed);
-    },
-    editingMode(todo) {
-      this.beforeEditCache = todo.title;
-      this.editTodo = todo;
-    },
-    doneEdit: function (todo) {
-      if (!this.editTodo) {
-        return;
-      }
-      this.editTodo = null;
-      this.beforeEditCache = null;
-      todo.title = todo.title.trim();
-      if (!todo.title) {
-        this.removeTodo(todo);
-      }
-    },
-    cancelEdit: function (todo) {
-      this.editTodo = null;
-      todo.title = this.beforeEditCache;
-      this.beforeEditCache = null;
-    },
+    // changeFilter: function(filter) {
+    //   this.filter = filter
+    // },
+    // addTodo: function (value) {
+    //   var value = this.newTodo && this.newTodo.trim();
+    //   if (!value) {
+    //     return;
+    //   }
+    //   this.todos.push({ id: this.todos.length + 1, title: value, completed: false });
+    //   this.newTodo = '';
+    // },
+    // removeTodo: function (todo) {
+    //   var index = this.todos.indexOf(todo);
+    //   this.todos.splice(index, 1);
+    // },
+    // removeCompleted: function () {
+    //   this.todos = this.todos.filter(data => !data.completed);
+    // },
+    // editingMode(todo) {
+    //   this.beforeEditCache = todo.title;
+    //   this.editTodo = todo;
+    // },
+    // doneEdit: function (todo) {
+    //   if (!this.editTodo) {
+    //     return;
+    //   }
+    //   this.editTodo = null;
+    //   this.beforeEditCache = null;
+    //   todo.title = todo.title.trim();
+    //   if (!todo.title) {
+    //     this.removeTodo(todo);
+    //   }
+    // },
+    // cancelEdit: function (todo) {
+    //   this.editTodo = null;
+    //   todo.title = this.beforeEditCache;
+    //   this.beforeEditCache = null;
+    // },
   },
-  computed: {
-      showTodo: function() {
-        let filter = this.filter;
-        let showTodo = this.todos.filter( data => {
-          if(filter === 'all'){
-            return data
-          }else if( filter === 'active'){
-            return !data.completed
-          }else if( filter === 'completed'){
-            return data.completed
-          }
-        })
-        return showTodo
-      },
-      allDone: {
-        get: function () {
-          return this.todos.every(data => data.completed);
-        },
-        set: function (value) {
-          this.todos.forEach(function (todo) {
-            todo.completed = value;
-          });
-        }
-      }
-    },
+  // computed: {
+  //   showTodo: function() {
+  //     let filter = this.filter;
+  //     let showTodo = this.todos.filter( data => {
+  //       if(filter === 'all'){
+  //         return data
+  //       }else if( filter === 'active'){
+  //         return !data.completed
+  //       }else if( filter === 'completed'){
+  //         return data.completed
+  //       }
+  //     })
+  //     return showTodo
+  //   },
+  //   allDone: {
+  //     get: function () {
+  //       return this.todos.every(data => data.completed);
+  //     },
+  //     set: function (value) {
+  //       this.todos.forEach(function (todo) {
+  //         todo.completed = value;
+  //       });
+  //     }
+  //   }
+  // },
   // http://vuejs.org/guide/custom-directive.html
-  directives: {
-    'todo-focus': function (el, binding) {
-      if (binding.value) {
-        el.focus();
-      }
-    }
+  // directives: {
+  //   'todo-focus': function (el, binding) {
+  //     if (binding.value) {
+  //       el.focus();
+  //     }
+  //   }
+  // },
+  components: {
+    'the-header': TheHeader,
+    'todo-list': TodoList,
+    'the-footer': TheFooter
   }
 }
 </script>
-
-<style>
-
-</style>
