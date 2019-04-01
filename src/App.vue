@@ -6,12 +6,12 @@
         <input class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?">
       </header>
       <section class="main">
-        <input id="toggle-all" class="toggle-all" type="checkbox">
+        <input id="toggle-all" class="toggle-all" type="checkbox" v-model="allDone">
         <label for="toggle-all">Mark all as complete</label>
         <ul class="todo-list">
           <li :class="['todo',{completed: todo.completed === true}, {editing: editTodo === todo}]" v-for="(todo,index) in todos" :key="index">
             <div class="view">
-              <input class="toggle" type="checkbox">
+              <input class="toggle" type="checkbox" v-model="todo.completed">
               <label @dblclick="editingMode(todo)">{{todo.title}}</label>
               <button class="destroy"></button>
             </div>
@@ -85,6 +85,18 @@ export default {
       this.beforeEditCache = null;
     },
   },
+  computed: {
+      allDone: {
+        get: function () {
+          return this.todos.every(data => data.completed);
+        },
+        set: function (value) {
+          this.todos.forEach(function (todo) {
+            todo.completed = value;
+          });
+        }
+      }
+    },
   // http://vuejs.org/guide/custom-directive.html
   directives: {
     'todo-focus': function (el, binding) {
