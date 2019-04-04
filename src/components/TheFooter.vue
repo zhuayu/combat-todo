@@ -1,20 +1,20 @@
 <template>
-  <footer class="footer">
+  <footer class="footer" v-show="todosCount">
     <span class="todo-count">
-      <strong>{{todosCount}}</strong> todo
+      <strong>{{todosCount}}</strong> 项目
     </span>
     <ul class="filters">
       <li>
-        <router-link to="/all" :class="{selected: filter === 'all'}" >ALL</router-link>
+        <router-link to="/all" :class="{selected: filter === 'all'}" >全部</router-link>
       </li>
       <li>
-        <router-link to="/active" :class="{selected: filter === 'active'}">Active</router-link>
+        <router-link to="/active" :class="{selected: filter === 'active'}">进行中</router-link>
       </li>
       <li>
-        <router-link to="/completed" :class="{selected: filter === 'completed'}">Completed</router-link>
+        <router-link to="/completed" :class="{selected: filter === 'completed'}">已完成</router-link>
       </li>
     </ul>
-    <button class="clear-completed" v-show="hasCompleted" @click="removeCompleted" >Clear completed</button>
+    <button class="clear-completed" v-show="hasCompleted" @click="removeCompleted" >删除已完成</button>
   </footer>
 </template>
 
@@ -41,7 +41,6 @@ export default {
     todosCount() {
       return this.$store.getters.todosCount
     },
-
     hasCompleted() {
       return this.$store.getters.hasCompleted
     },
