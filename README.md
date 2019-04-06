@@ -99,11 +99,12 @@ Vue CLI 是一个基于 Vue.js 进行快速开发的完整系统，致力于将 
 任务提示：
 1. 下载安装 Vue-CLI 3，使用 vue create
 2. 参考 todomvc.com 完成结构与样式，亦可导入如下结构与样式。
-[base.css](https://uploader.shimo.im/f/tgoQz4vYMwYJpGUI.css)
 
-[index.css](https://uploader.shimo.im/f/gzqMeFK4jBQ55ua4.css)
+[base.css](./src/assets/base.css)
 
-[index.html](https://uploader.shimo.im/f/5J6kQwQAMJYMd1k6.html)
+[index.css](./src/assets/index.css)
+
+[index.html](./src/assets/index.html)
 
 
 ### 3.2- 列表渲染
