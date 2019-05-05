@@ -22,7 +22,19 @@ const store = new Vuex.Store({
     },
     allCompleted: (state) => {
       return state.todos.every(data => data.completed)
-    }
+    },
+    showTodo: (state)=> {
+      let filter = state.filter;
+      return state.todos.filter( data => {
+        if(filter === 'all'){
+          return true
+        }else if( filter === 'active'){
+          return !data.completed
+        }else if( filter === 'completed'){
+          return data.completed
+        }
+      })
+    },
   },
   mutations: {
     changeFilter (state, filter) {
